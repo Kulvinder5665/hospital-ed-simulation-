@@ -96,3 +96,34 @@ python -m streamlit run app.py --server.port 8502
 # Press Ctrl+C in the server terminal to stop Streamlit.
 # After the server stops, leave the virtual environment.
 deactivate
+
+# Data flow
+
+User runs main.py
+    ↓
+argparse reads terminal options
+    ↓
+args.repetitions, args.patients, args.arrival
+    ↓
+main.py calls run_experiment(...)
+    ↓
+experiment loops over random seeds
+    ↓
+experiment calls run_simulation(...) for each policy
+    ↓
+simulation generates patient objects
+    ↓
+SimPy processes arrival, registration, triage, queue, and treatment
+    ↓
+run_simulation() creates:
+    patient DataFrame
+    timeline DataFrame
+    summary dictionary
+    ↓
+experiment combines repeated runs
+    ↓
+pandas creates averaged table
+    ↓
+CSV files and PNG chart are written
+    ↓
+main.py prints the averaged table
